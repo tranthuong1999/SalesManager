@@ -9,27 +9,25 @@ import {
 } from "react-native";
 import { formatPrice } from "../utils/Number";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
 export default class ProductListItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
     };
   }
-  
+
    render() {
-    const { product, onAddToCardClick } = this.props;
+    const { product , onAddToCardClick } = this.props;
     return (
       <View style={styles.shadow}>
         <View style={styles.container}>
-          <Image style={styles.img} source={{ uri: product.images[0].url }} />
+          <Image style={styles.img} source={{uri: product.images}} />
           <View style={styles.info}>
             <Text style={styles.name}>{product.name}</Text>
             <View style={styles.priceRow}>
               <Text style={styles.price}>
                 {" "}
-                {formatPrice(product.salePrice)}{" "}
+                {formatPrice(product.salePrices)}{" "}
               </Text>
               <TouchableOpacity onPress={() => onAddToCardClick(product) } >
                 <Text style={styles.cartText} >MUA </Text>

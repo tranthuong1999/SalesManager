@@ -1,233 +1,127 @@
 
+import React, {useState, useEffect} from 'react';
+import {
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  View,
+  FlatList,
+  TextInput,
+} from 'react-native';
+import  firebase  from "../firebase/Config";
 
-// import React, { Component } from 'react';
 
-// import {
-//   AppRegistry,
-//   StyleSheet,
-//   Text,
-//   View,
-//   ScrollView,
-//   Alert
-// } from 'react-native';
+const Order = () => {
+  const [search, setSearch] = useState('');
+  const [filteredDataSource, setFilteredDataSource] = useState([]);
+  const [masterDataSource, setMasterDataSource] = useState([]);
 
-// import CodeInput from '../components/CodeInput';
-
-//   export default class Order extends Component {
-//   constructor(props) {
-//     super(props);
-    
-//     this.state = {
-//       code: ''
-//     };
-//   }
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/posts')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        setFilteredDataSource(responseJson);
+        setMasterDataSource(responseJson);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
   
-//   _onFulfill(code) {
-//     // TODO: call API to check code here
-//     // If code does not match, clear input with: this.refs.codeInputRef1.clear()
-//     if (code == 'Q234E') {
-//       Alert.alert(
-//         'Confirmation Code',
-//         'Successful!',
-//         [{text: 'OK'}],
-//         { cancelable: false }
-//       );
-//     } else {
-//       Alert.alert(
-//         'Confirmation Code',
-//         'Code not match!',
-//         [{text: 'OK'}],
-//         { cancelable: false }
-//       );
-      
-//       this.refs.codeInputRef1.clear();
-//     }
-//   }
-  
-//   _onFinishCheckingCode1(isValid) {
-//     console.log(isValid);
-//     if (!isValid) {
-//       Alert.alert(
-//         'Confirmation Code',
-//         'Code not match!',
-//         [{text: 'OK'}],
-//         { cancelable: false }
-//       );
-//     } else {
-//       Alert.alert(
-//         'Confirmation Code',
-//         'Successful!',
-//         [{text: 'OK'}],
-//         { cancelable: false }
-//       );
-//     }
-//   }
-  
-//   _onFinishCheckingCode2(isValid, code) {
-//     console.log(isValid);
-//     if (!isValid) {
-//       Alert.alert(
-//         'Confirmation Code',
-//         'Code not match!',
-//         [{text: 'OK'}],
-//         { cancelable: false }
-//       );
-//     } else {
-//       this.setState({ code });
-//       Alert.alert(
-//         'Confirmation Code',
-//         'Successful!',
-//         [{text: 'OK'}],
-//         { cancelable: false }
-//       );
-//     }
-//   }
-  
-//   render() {
-    
-//     return (
-//       <View style={styles.container}>
-//         <ScrollView style={styles.wrapper}>
-//           <View style={styles.titleWrapper}>
-//             <Text style={styles.title}>CODE INPUT DEMO</Text>
-//           </View>
-          
-//           <View style={styles.inputWrapper1}>
-//             <Text style={styles.inputLabel1}>UNDERLINE CONFIRMATION CODE</Text>
-//             <CodeInput
-//               ref="codeInputRef1"
-//               secureTextEntry
-//               className={'border-b'}
-//               space={5}
-//               size={30}
-//               inputPosition='left'
-//               onFulfill={(code) => this._onFulfill(code)}
-//               onCodeChange={(code) => { this.state.code = code }}
-//             />
-//           </View>
-  
-//           <View style={styles.inputWrapper2}>
-//             <Text style={styles.inputLabel2}>BOX CONFIRMATION CODE</Text>
-//             <CodeInput
-//               ref="codeInputRef2"
-//               secureTextEntry
-//               compareWithCode='AsDW2'
-//               activeColor='rgba(49, 180, 4, 1)'
-//               inactiveColor='rgba(49, 180, 4, 1.3)'
-//               autoFocus={false}
-//               ignoreCase={true}
-//               inputPosition='center'
-//               size={50}
-//               onFulfill={(isValid) => this._onFinishCheckingCode1(isValid)}
-//               containerStyle={{ marginTop: 30 }}
-//               codeInputStyle={{ borderWidth: 1.5 }}
-//               onCodeChange={(code) => { this.state.code = code }}
-//             />
-//           </View>
-//           <View style={styles.inputWrapper3}>
-//             <Text style={styles.inputLabel3}>CIRCLE CONFIRMATION CODE</Text>
-//             <CodeInput
-//               ref="codeInputRef2"
-//               keyboardType="numeric"
-//               codeLength={5}
-//               className={'border-circle'}
-//               compareWithCode='12345'
-//               autoFocus={false}
-//               codeInputStyle={{ fontWeight: '800' }}
-//               onFulfill={(isValid, code) => this._onFinishCheckingCode2(isValid, code)}
-//               onCodeChange={(code) => { this.state.code = code }}
-//             />
-//           </View>
-//         </ScrollView> 
-//       </View>
-//     );
-//   }
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#F5F6CE'
-//   },
-//   titleWrapper: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     flexDirection: 'row',
-//   },
-//   title: {
-//     color: 'red',
-//     fontSize: 16,
-//     fontWeight: '800',
-//     paddingVertical: 30
-//   },
-//   wrapper: {
-//     marginTop: 30
-//   },
-//   inputWrapper1: {
-//     paddingVertical: 50,
-//     paddingHorizontal: 20,
-//     backgroundColor: '#009C92'
-//   },
-//   inputWrapper2: {
-//     paddingVertical: 50,
-//     paddingHorizontal: 20,
-//     backgroundColor: '#E0F8F1'
-//   },
-//   inputWrapper3: {
-//     paddingVertical: 50,
-//     paddingHorizontal: 20,
-//     backgroundColor: '#2F0B3A'
-//   },
-//   inputLabel1: {
-//     color: '#fff',
-//     fontSize: 14,
-//     fontWeight: '800'
-//   },
-//   inputLabel2: {
-//     color: '#31B404',
-//     fontSize: 14,
-//     fontWeight: '800',
-//     textAlign: 'center'
-//   },
-//   inputLabel3: {
-//     color: '#fff',
-//     fontSize: 14,
-//     fontWeight: '800',
-//     textAlign: 'center'
-//   }
-// });
-
-
-
-import { NavigationContainer } from '@react-navigation/native';
-import React ,{Component} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-
-export default class Setting extends Component {
-  constructor(props){
-    super(props)
-    this.state ={
-
+  const searchFilterFunction = (text) => {
+    // Check if searched text is not blank
+    if (text) {
+      // Inserted text is not blank
+      // Filter the masterDataSource
+      // Update FilteredDataSource
+      const newData = masterDataSource.filter(
+        function (item) {
+          const itemData = item.title
+            ? item.title.toUpperCase()
+            : ''.toUpperCase();
+          const textData = text.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+      });
+      setFilteredDataSource(newData);
+      setSearch(text);
+    } else {
+      // Inserted text is blank
+      // Update FilteredDataSource with masterDataSource
+      setFilteredDataSource(masterDataSource);
+      setSearch(text);
     }
-  }
-  render(){
-      const { navigation } = this.props
+  };
+
+  const ItemView = ({item}) => {
     return (
-      <View style={styles.container}>
-        <Text> Order Screen </Text>       
-      </View>
+      // Flat List Item
+      <Text
+        style={styles.itemStyle}
+        onPress={() => getItem(item)}>
+        {item.id}
+        {'.'}
+        {item.title.toUpperCase()}
+      </Text>
     );
-  }
-}
+  };
+
+  const ItemSeparatorView = () => {
+    return (
+      // Flat List Item Separator
+      <View
+        style={{
+          height: 0.5,
+          width: '100%',
+          backgroundColor: '#C8C8C8',
+        }}
+      />
+    );
+  };
+
+  const getItem = (item) => {
+    // Function for click on an item
+    alert('Id : ' + item.id + ' Title : ' + item.title);
+  };
+
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <View style={styles.container}>
+        <TextInput
+          style={styles.textInputStyle}
+          onChangeText={(text) => searchFilterFunction(text)}
+          value={search}
+          underlineColorAndroid="transparent"
+          placeholder="Search Here"
+        />
+        <FlatList
+          data={filteredDataSource}
+          keyExtractor={(item, index) => index.toString()}
+          ItemSeparatorComponent={ItemSeparatorView}
+          renderItem={ItemView}
+        />
+      </View>
+    </SafeAreaView>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#003f5c',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: 'white',
   },
-  
+  itemStyle: {
+    padding: 10,
+  },
+  textInputStyle: {
+    height: 40,
+    borderWidth: 1,
+    paddingLeft: 20,
+    margin: 5,
+    borderColor: '#009688',
+    backgroundColor: '#FFFFFF',
+  },
 });
+
+export default Order;
 
 
 

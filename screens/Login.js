@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { Image, Text, TextInput, TouchableOpacity, View , StyleSheet } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { firebase } from '../firebase/config'
+import   firebaseConfig   from '../firebase/Config';
+
 
 
 export default function LoginScreen({navigation}) {
@@ -9,16 +10,20 @@ export default function LoginScreen({navigation}) {
     const [password, setPassword] = useState('')
 
     const onFooterLinkPress = () => {
+        console.log("Register Clicked")
         navigation.navigate('Register')
     }
 
     const onLoginPress = () => {
-        firebase
+        firebaseConfig
+        .firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then((response) => {
+            console.log("Respone :" , response.user)
+
             const uid = response.user.uid
-            const usersRef = firebase.firestore().collection('users')
+            const usersRef = firebaseConfig.firebase.firestore().collection('users')
             usersRef
                 .doc(uid)
                 .get()
@@ -28,7 +33,7 @@ export default function LoginScreen({navigation}) {
                         return;
                     }
                     const user = firestoreDocument.data()
-                    navigation.navigate('Category', {user})
+                    navigation.navigate('TabView', {user})
                 })
                 .catch(error => {
                     alert(error)
@@ -44,10 +49,6 @@ export default function LoginScreen({navigation}) {
             <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always">
-                {/* <Image
-                    style={styles.logo}
-                    source={require('../../assets/icon.png')}
-                /> */}
                 <TextInput
                     style={styles.input}
                     placeholder='E-mail'

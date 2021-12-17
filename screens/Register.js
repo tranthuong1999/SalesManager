@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Image, Text, TextInput, TouchableOpacity, View , StyleSheet, Alert } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { firebase } from '../firebase/config'
+import  firebaseConfig  from '../firebase/Config'
 
 
 
@@ -12,7 +12,7 @@ export default function RegistrationScreen({navigation}) {
     const [confirmPassword, setConfirmPassword] = useState('')
 
     const onFooterLinkPress = () => {
-        navigation.navigate('Login')
+        navigation.navigate('Register')
     }
 
     const onRegisterPress = () => {
@@ -22,6 +22,7 @@ export default function RegistrationScreen({navigation}) {
         }
         Alert.alert("Tao tk thanh cong")
         navigation.navigate('Login')
+        firebaseConfig.
         firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)
@@ -32,7 +33,7 @@ export default function RegistrationScreen({navigation}) {
                     email,
                     fullName,
                 };
-                const usersRef = firebase.firestore().collection('users')
+                const usersRef = firebaseConfig.firebase.firestore().collection('users')
                 usersRef
                     .doc(uid)
                     .set(data)

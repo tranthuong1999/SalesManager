@@ -5,6 +5,7 @@ import SkiImage  from '../assets/ski.png';
 
 export default function CategoryListItem ( props ) {
     const { category , onPress} = props 
+    // console.log("Category :" , props.category )
      return(
          <TouchableOpacity 
          activeOpacity={0.5}
@@ -12,7 +13,7 @@ export default function CategoryListItem ( props ) {
          > 
          <View style={styles.container}>
             <Text style={styles.title}> {category.name} </Text>
-            <Image style={styles.categoryImages} source={SkiImage} />
+            <Image style={styles.categoryImages} source={{ uri : category.images}} />
         </View>
          </TouchableOpacity>
   
@@ -31,8 +32,8 @@ const styles = StyleSheet.create({
         marginBottom:16
     },
     categoryImages:{
-        width:64,
-        height:64
+        width:170,
+        height:130
     },
     title:{
         textTransform:"uppercase",

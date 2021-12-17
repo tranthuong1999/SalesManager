@@ -10,17 +10,20 @@ import CategoriesScreen from "./Categories";
 import OrderScreen from "./Order";
 import CartScreen from "./Cart";
 import LoginScreen from "./Login";
+import SettingScreen from "./Setting";
+
+import  firebaseConfig from "../firebase/Config";
+
 
 
 import { Ionicons } from "@expo/vector-icons";
 
-const windowWidth = Dimensions.get("window").width;
-const color ={
-  ACTIVE:'#147efb',
-  INACTIVE:'#ccc'
-}
+if (!global.btoa) {  global.btoa = encode }
+if (!global.atob) { global.atob = decode }
 
-export default class Category extends Component {
+const windowWidth = Dimensions.get("window").width;
+
+export default class Bottom extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,21 +32,52 @@ export default class Category extends Component {
         { key: "first", title: "Home" },
         { key: "second", title: "Cart" },
         { key: "three", title: "Orders" },
-        { key: "four", title: "Login" },
+        { key: "four", title: "Setting" },
       ],
+      loading : true ,
+      user : null 
     };
   }
+   componentDidMount(){
+    const usersRef = firebaseConfig.firebase.firestore().collection('users');
+     firebaseConfig.firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          usersRef
+            .doc(user.uid)
+            .get()
+            .then((document) => {
+              const userData = document.data()
+              this.setState({
+                loading:false
+              })
+              this.setState({
+                user:userData
+              })
+            })
+            .catch((error) => {
+              this.setState({
+                loading:false
+              })
+            });
+        } else {
+          this.setState({
+            loading:false
+          })
+        }
+      });
+   }
 
-  renderScene = ({ route }) => {
+  renderScene = ({ route  }) => {
+    
     switch (route.key) {
       case "first":
         return <CategoriesScreen navigation={this.props.navigation} />;
       case "second":
-        return <CartScreen />;
+        return <CartScreen navigation={this.props.navigation} />;
       case "three":
-        return <OrderScreen />;
+        return <OrderScreen  navigation={this.props.navigation}/>;
       case "four":
-        return <LoginScreen  navigation={this.props.navigation}/>;
+        return <SettingScreen  navigation={this.props.navigation}/>;
       default:
         return null;
     }
@@ -67,9 +101,6 @@ export default class Category extends Component {
         if (route.key == "four") {
           return <Ionicons name="settings" size={23} color="black" />;
         }
-        // if( route.key == 'null'){
-        // return <Ionicons color={ focused ? color.ACTIVE : color.INACTIVE}  />
-        // }
       }}
     />
   );

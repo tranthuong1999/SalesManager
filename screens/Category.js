@@ -9,8 +9,8 @@ import {
   Alert,
 } from "react-native";
 import ProductListItem from "../components/ProductListItem";
-import axios from "axios";
 import { Ionicons } from "@expo/vector-icons";
+import  firebaseConfig from "../firebase/Config";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const windowWidth = Dimensions.get("window").width;
@@ -19,109 +19,43 @@ export default class Category extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      product: [
-        {
-        id: 1, 
-        images:[
-         {
-           url:"http://sc04.alicdn.com/kf/H7c5285b2ac374441877387b528c524776.jpg "
-         }
-        ],
-        name: " Mặt hàng 1",
-        color: "Red", 
-        qty: 1,
-        salePrice: "105", 
-        checked: 1
-        },
-        {
-          id: 2, 
-          images:[
-           {
-             url:"http://sc04.alicdn.com/kf/H7c5285b2ac374441877387b528c524776.jpg "
-           }
-          ],
-          name: " Mặt hàng 2",
-          color: "Red", 
-          qty: 1,
-          salePrice: "105", 
-          checked: 1
-          },
-          {
-            id: 3, 
-            images:[
-             {
-               url:"http://sc04.alicdn.com/kf/H7c5285b2ac374441877387b528c524776.jpg "
-             }
-            ],
-            name: "Mặt hàng 3",
-            color: "Red", 
-            qty: 1,
-            salePrice: "105", 
-            checked: 1
-            },
-            {
-              id: 4, 
-              images:[
-               {
-                 url:"http://sc04.alicdn.com/kf/H7c5285b2ac374441877387b528c524776.jpg "
-               }
-              ],
-              name: "Mặt hàng 4",
-              color: "Red", 
-              qty: 1,
-              salePrice: "105", 
-              checked: 1
-              },
-              {
-                id: 5, 
-                images:[
-                 {
-                   url:"http://sc04.alicdn.com/kf/H7c5285b2ac374441877387b528c524776.jpg "
-                 }
-                ],
-                name: " Mặt hàng 5",
-                color: "Red", 
-                qty: 1,
-                salePrice: "105", 
-                checked: 1
-                },
-                {
-                  id: 6, 
-                  images:[
-                   {
-                     url:"http://sc04.alicdn.com/kf/H7c5285b2ac374441877387b528c524776.jpg "
-                   }
-                  ],
-                  name: " Mặt hàng 6",
-                  color: "Red", 
-                  qty: 1,
-                  salePrice: "105", 
-                  checked: 1
-                  },
-      ],
-      
-      index: 0,
-      routes: [
-        { key: "first", title: "First" },
-        { key: "second", title: "Second" },
-      ],
-    };
+    products:[],
+    cart:[]
   }
-  // componentDidMount(){
-  //   axios.get('/products')
-  //   .then( res =>{
-  //     this.setState({
-  //       product: res.data
-  //     })
-  //   })
-  //   .catch( err =>{
-  //     console.log("error :" ,err)
-  //   })
-  // }
+  }
 
+  componentDidMount() {
+    this.getDataProduct();
+  }
 
-   async onAddToCard(product ){
+  getDataProduct() {
+    console.log('Clicked mua')
+      firebaseConfig.db.collection('products').onSnapshot((querySnapshot) => {
+        const product = [];
+        querySnapshot.docs.forEach((doc) => {
+          const { name , color , checked , salePrices , qty , images , categoriesID  } = doc.data();
+          
+          console.log("id categories :" , categoriesID)
+          product.push({
+            id: doc.id,
+            name,
+            color,
+            checked,
+            salePrices,
+            qty,
+            images,
+          });
+        });
+        this.setState({
+          product:product
+        })
+        console.log("Product" , product)
+      });
 
+  }
+
+  async onAddToCard(product ){
+    
     const productLocal = await AsyncStorage?.getItem('product') 
 
     if( productLocal == null){
@@ -144,8 +78,6 @@ export default class Category extends Component {
     }
    }
    
-
-
   render() {
     const { route, navigation } = this.props;
 
@@ -181,8 +113,8 @@ export default class Category extends Component {
               <View style={styles.wrapper}>
                 <ProductListItem 
                 product={item} 
-                onAddToCardClick={ (product  ) => 
-                this.onAddToCard(product  )
+                onAddToCardClick={ (product ) => 
+                this.onAddToCard(product)
                 } 
                 />
               </View>

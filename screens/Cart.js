@@ -2,6 +2,8 @@ import React ,{ Component} from 'react';
 import { StyleSheet, Button, Text, View, TouchableOpacity, ScrollView, Image, ActivityIndicator, TextInput, Alert } from 'react-native';
 import { MaterialIcons, AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import  firebase  from "../firebase/Config";
+import { NavigationContainer } from '@react-navigation/native';
 
 export default class Cart extends Component {
   constructor(props) {
@@ -59,12 +61,11 @@ export default class Cart extends Component {
 	subtotalPrice = () => {
 		const { cartItems } = this.state;
 		if(cartItems){
-			return cartItems.reduce((sum, item) => sum + (item.checked == 1 ? item.qty * item.salePrice : 0), 0 );
+			return cartItems.reduce((sum, item) => sum + (item.checked == 1 ? item.qty * item.salePrices : 0), 0 );
 		}
 		return 0;
 	}
-
-  getData = async () => {
+  getDataCart = async () => {
     try {
       const values = await AsyncStorage.getItem("product");
       this.setState({
@@ -74,12 +75,15 @@ export default class Cart extends Component {
       console.log("error :", e);
     }
   };
-  componentDidMount() {
-    this.getData();
+  componentDidMount(){
+    this.getDataCart()
   }
+  
   
 
   render() {
+    const { navigation } = this.props;
+
     const styles = StyleSheet.create({
 			centerElement: {justifyContent: 'center', alignItems: 'center'},
 		});
@@ -111,12 +115,12 @@ export default class Cart extends Component {
               </View>
               <View style={{flexDirection: 'row', flexGrow: 1, flexShrink: 1, alignSelf: 'center'}}>
                 <TouchableOpacity onPress={() => {/*this.props.navigation.navigate('ProductDetails', {productDetails: item})*/}} style={{paddingRight: 10}}>
-                  <Image source={{uri: item.images[0].url}} style={[styles.centerElement, {height: 60, width: 60, backgroundColor: '#eeeeee'}]} />
+                  <Image source={{uri: item.images}} style={[styles.centerElement, {height: 60, width: 60, backgroundColor: '#eeeeee'}]} />
                 </TouchableOpacity>
                 <View style={{flexGrow: 1, flexShrink: 1, alignSelf: 'center'}}>
                   <Text numberOfLines={1} style={{fontSize: 15}}>{item.name}</Text>
                   {/* <Text numberOfLines={1} style={{color: '#8f8f8f'}}>{item.color ? 'Variation: ' + item.color : ''}</Text> */}
-                  <Text numberOfLines={1} style={{color: '#333333', marginBottom: 10}}>${item.qty * item.salePrice}</Text>
+                  <Text numberOfLines={1} style={{color: '#333333', marginBottom: 10}}>{item.qty * item.salePrices}K</Text>
                   <View style={{flexDirection: 'row'}}>
                     <TouchableOpacity onPress={() => this.quantityHandler('less', i)} style={{ borderWidth: 1, borderColor: '#cccccc' }}>
                       <MaterialIcons name="remove" size={22} color="#cccccc" />
@@ -144,12 +148,12 @@ export default class Cart extends Component {
           <View style={{flexDirection: 'row'}}>
             <View style={[styles.centerElement, {width: 60}]}>
               <View style={[styles.centerElement, {width: 32, height: 32}]}>
-                <MaterialCommunityIcons name="ticket" size={25} color="#f0ac12" />
+                {/* <MaterialCommunityIcons name="ticket" size={25} color="#f0ac12" /> */}
               </View>
             </View>
             <View style={{flexDirection: 'row', flexGrow: 1, flexShrink: 1, justifyContent: 'space-between', alignItems: 'center'}}>
-              <Text>Voucher</Text>
-              <View style={{paddingRight: 20}}>
+              {/* <Text>Voucher</Text> */}
+              {/* <View style={{paddingRight: 20}}>
                 <TextInput 
                   style={{paddingHorizontal: 10, backgroundColor: '#f0f0f0', height: 25, borderRadius: 4}} 
                   placeholder="Enter voucher code" 
@@ -158,7 +162,7 @@ export default class Cart extends Component {
                     
                   } }
                 /> 
-              </View>
+              </View> */}
             </View>
           </View>
           <View style={{flexDirection: 'row'}}>
@@ -171,13 +175,15 @@ export default class Cart extends Component {
               <Text>Select All</Text>
               <View style={{flexDirection: 'row', paddingRight: 20, alignItems: 'center'}}>
                 <Text style={{color: '#8f8f8f'}}>SubTotal: </Text>
-                <Text>${this.subtotalPrice().toFixed(2)}</Text>
+                <Text>{this.subtotalPrice().toFixed(2)}K</Text>
               </View>
             </View>
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'flex-end', height: 32, paddingRight: 20, alignItems: 'center'}}>
-            <TouchableOpacity style={[styles.centerElement, {backgroundColor: '#0faf9a', width: 100, height: 25, borderRadius: 5}]} onPress={() => console.log('test')}>
-              <Text style={{color: '#ffffff'}}>Checkout</Text>
+            <TouchableOpacity style={[styles.centerElement, {backgroundColor: '#0faf9a', width: 100, height: 25, borderRadius: 5}]}
+             onPress={() => this.props.navigation.navigate('PayBill')}
+             >
+              <Text style={{color: '#ffffff'}}>Đặt hàng </Text>
             </TouchableOpacity>
           </View>
         </View>
