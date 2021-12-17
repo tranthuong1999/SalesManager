@@ -18,8 +18,8 @@ import  firebaseConfig from "../firebase/Config";
 
 import { Ionicons } from "@expo/vector-icons";
 
-if (!global.btoa) {  global.btoa = encode }
-if (!global.atob) { global.atob = decode }
+// if (!global.btoa) {  global.btoa = encode }
+// if (!global.atob) { global.atob = decode }
 
 const windowWidth = Dimensions.get("window").width;
 

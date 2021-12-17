@@ -9,8 +9,8 @@ import LoginScreen from './Login';
 import Register from './Register'
 
 
-if (!global.btoa) {  global.btoa = encode }
-if (!global.atob) { global.atob = decode }
+// if (!global.btoa) {  global.btoa = encode }
+// if (!global.atob) { global.atob = decode }
 
 const Stack = createStackNavigator();
 

@@ -87,7 +87,7 @@ export default class Category extends Component {
           <Ionicons
             style={{ marginTop: 50, marginLeft: 40, paddingBottom: 20 }}
             name="arrow-back-circle"
-            size={25}
+            size={30}
             type="back"
             color="black"
             onPress={() => navigation.goBack()}
