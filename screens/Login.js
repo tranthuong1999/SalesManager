@@ -34,6 +34,8 @@ export default function LoginScreen({navigation}) {
                     }
                     const user = firestoreDocument.data()
                     navigation.navigate('TabView', {user})
+                    // navigation.navigate('Categories', {user})
+
                 })
                 .catch(error => {
                     alert(error)

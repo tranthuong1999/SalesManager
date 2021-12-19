@@ -2,7 +2,7 @@ import React ,{ Component} from 'react';
 import { StyleSheet, Button, Text, View, TouchableOpacity, ScrollView, Image, ActivityIndicator, TextInput, Alert } from 'react-native';
 import { MaterialIcons, AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import  firebase  from "../firebase/Config";
+import  firebaseConfig  from "../firebase/Config";
 import { NavigationContainer } from '@react-navigation/native';
 
 export default class Cart extends Component {
@@ -30,7 +30,7 @@ export default class Cart extends Component {
 	
 	deleteHandler = (index) => {
 		Alert.alert(
-			'Are you sure you want to delete this item from your cart?',
+			'Bạn có chắc chắn muốn xóa sản phẩm này không?',
 			'',
 			[
 				{text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
@@ -66,14 +66,28 @@ export default class Cart extends Component {
 		return 0;
 	}
   getDataCart = async () => {
-    try {
-      const values = await AsyncStorage.getItem("product");
-      this.setState({
-       cartItems: JSON.parse(values),
+   
+    firebaseConfig.db.collection('cart').onSnapshot((querySnapshot) => {
+      const product = [];
+      querySnapshot.docs.forEach((doc) => {
+        const { name , color , checked , salePrices , qty , images   } = doc.data();
+        
+        // console.log("id categories :" , categoriesID)
+        product.push({
+          id: doc.id,
+          name,
+          color,
+          checked,
+          salePrices,
+          qty,
+          images,
+        });
       });
-    } catch (e) {
-      console.log("error :", e);
-    }
+      this.setState({
+        cartItems:product
+      })
+      console.log("Product" , product)
+    });
   };
   componentDidMount(){
     this.getDataCart()

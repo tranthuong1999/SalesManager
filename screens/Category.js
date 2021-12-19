@@ -7,6 +7,8 @@ import {
   Button,
   Dimensions,
   Alert,
+  TouchableOpacity,
+  Image
 } from "react-native";
 import ProductListItem from "../components/ProductListItem";
 import { Ionicons } from "@expo/vector-icons";
@@ -29,13 +31,12 @@ export default class Category extends Component {
   }
 
   getDataProduct() {
-    console.log('Clicked mua')
+    // console.log('Clicked mua')
       firebaseConfig.db.collection('products').onSnapshot((querySnapshot) => {
         const product = [];
         querySnapshot.docs.forEach((doc) => {
-          const { name , color , checked , salePrices , qty , images , categoriesID  } = doc.data();
-          
-          console.log("id categories :" , categoriesID)
+          const { name , color , checked , salePrices , qty , images   } = doc.data();
+          // console.log("id categories :" , categoriesID)
           product.push({
             id: doc.id,
             name,
@@ -49,33 +50,46 @@ export default class Category extends Component {
         this.setState({
           product:product
         })
-        console.log("Product" , product)
+        // console.log("Product" , product)
       });
 
   }
 
   async onAddToCard(product ){
-    
-    const productLocal = await AsyncStorage?.getItem('product') 
 
-    if( productLocal == null){
-      var list = []
-      list.push(product)
-     AsyncStorage.setItem('product', JSON.stringify(list))  
-     alert("Them thanh cong san pham " )
+    firebaseConfig.db.collection('cart').onSnapshot((querySnapshot) => {
+      const cart = [];
+      querySnapshot.docs.forEach((doc) => {
+        const { name , color , checked , salePrices , qty , images   } = doc.data();
+        // console.log(" cart  :" , doc.data())
+        cart.push({
+          id: doc.id,
+          name,
+          color,
+          checked,
+          salePrices,
+          qty,
+          images,
+        });
+      });
 
-    }else {
-      const productLocalArr =  JSON.parse(productLocal)
-      const check = productLocalArr.find( e => e.id == product.id )
-      //  console.log("Check :" ,check)
-       if(check == undefined){
-        productLocalArr.push(product)
-        AsyncStorage.setItem('product', JSON.stringify(productLocalArr))
-       alert("Them thanh cong san pham " )
-       }else{
-         alert("Ban da them roi ")
-       }
-    }
+      const itemCart = cart.find( e => e.name == product.name)
+      if( itemCart){
+        alert("Bạn đã thêm rồi")
+        return;
+      }
+      else{
+        firebaseConfig.db.collection("cart").add({
+                name: product.name,
+                color: product.color,
+                checked: product.checked,
+                salePrices:product.salePrices,
+                qty:product.qty,
+                images:product.images,
+              });
+              alert("Thêm sản phẩm thành công ")
+      }
+    });    
    }
    
   render() {
@@ -83,21 +97,31 @@ export default class Category extends Component {
 
     return (
       <View>
-        <View style={{ flex: 1, flexDirection: "row" }}>          
-          <Ionicons
-            style={{ marginTop: 50, marginLeft: 40, paddingBottom: 20 }}
+        <View style={{ flex: 1, flexDirection: "row" , marginLeft: 30 }}>          
+        <Ionicons
+            style={{ marginTop: 40, marginLeft: 20, paddingBottom: 40 }}
             name="arrow-back-circle"
             size={30}
             type="back"
             color="black"
             onPress={() => navigation.goBack()}
           />
+          {/* <TouchableOpacity onPress={ () =>{
+            Alert.alert('Clicked')
+            navigation.navigate('Categories') 
+          }}>
+              <Image
+          style={styles.tinyLogo}
+          source={{uri: 'https://cdn0.iconfinder.com/data/icons/spotify-line-ui-kit/100/go-back-line-512.png'}}
+        />
+        </TouchableOpacity> */}
           <Text
             style={{
-              fontSize: 30,
+              fontSize: 20,
               textAlign: "center",
-              marginTop: 5,
-              marginBottom: 20,
+              marginTop: 100,
+              marginBottom: 100,
+              marginLeft : 40,
               flex: 1,
             }}
           >
@@ -136,4 +160,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 8,
   },
+  tinyLogo: {
+    width: 30,
+    height: 30,
+    marginTop:30,
+    marginLeft:5
+  }
 });

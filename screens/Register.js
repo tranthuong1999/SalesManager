@@ -12,7 +12,7 @@ export default function RegistrationScreen({navigation}) {
     const [confirmPassword, setConfirmPassword] = useState('')
 
     const onFooterLinkPress = () => {
-        navigation.navigate('Register')
+        navigation.navigate('Login')
     }
 
     const onRegisterPress = () => {

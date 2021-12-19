@@ -17,9 +17,12 @@ import SettingScreen from "./screens/Setting";
 import TestLogin from "./screens/TestLogin";
 
 
+import { registerRootComponent } from 'expo';
+
+
 
 const Stack = createNativeStackNavigator();
-export default function App({ route }) {
+  export default function App({ route }) {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="TabView">
@@ -30,7 +33,6 @@ export default function App({ route }) {
       <Stack.Screen name="Login" options={{headerShown: false}} component={LoginScreen} />  
       <Stack.Screen name="PayBill" options={{headerShown: false}} component={PayBillScreen} />   
       <Stack.Screen name="Categories" options={{headerShown: false}} component={Categories} />      
-
     </Stack.Navigator>
     </NavigationContainer>
   );
@@ -44,3 +46,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+// registerRootComponent(App);

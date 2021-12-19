@@ -42,7 +42,7 @@ export default class Categories extends Component {
   render() {
     const { categories } = this.state;
     const { navigation } = this.props;
-    console.log("Categories" , categories)
+    // console.log("Categories" , categories)
     return (
       <FlatList
         data={categories}

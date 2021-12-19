@@ -38,9 +38,9 @@ export default function LoginScreen({navigation}) {
     return (
         <View style={styles.container}>
           <Ionicons
-            style={{ marginTop: 10, marginLeft: 10, paddingBottom: 20 }}
+            style={{ marginTop: 40, marginLeft: -288, paddingBottom: 20 }}
             name="arrow-back-circle"
-            size={25}
+            size={30}
             type="back"
             color="black"
             onPress={() => navigation.goBack()}
