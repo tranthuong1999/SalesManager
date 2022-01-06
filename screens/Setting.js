@@ -1,30 +1,22 @@
 import  React from 'react';
 import { Button, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import  firebaseConfig  from "../firebase/Config";
 
-import LoginScreen from './Login';
-import Register from './Register'
+import LogOut from './LogOut';
+import PinCode from './PinCode';
 
 
 
-function LogOut({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button
-        onPress={() => navigation.navigate('Login')}
-        title="Go to login"
-      />
-    </View>
-  );
-}
+
 const Drawer = createDrawerNavigator();
 
 export default function App() {
   return (
       <Drawer.Navigator initialRouteName="Login">
-        <Drawer.Screen name="Login" component={LoginScreen}  />
-        <Drawer.Screen name="Register" component={Register} />
-        <Drawer.Screen name="Logout" component={LogOut} />
+        <Drawer.Screen name="Logout"  component={LogOut} />
+        {/* <Drawer.Screen name="PinCode"  component={PinCode} /> */}
+
       </Drawer.Navigator>
   );
 }

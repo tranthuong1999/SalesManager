@@ -1,9 +1,7 @@
 import React ,{ Component} from 'react';
 import { StyleSheet, Button, Text, View, TouchableOpacity, ScrollView, Image, ActivityIndicator, TextInput, Alert } from 'react-native';
 import { MaterialIcons, AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import  firebaseConfig  from "../firebase/Config";
-import { NavigationContainer } from '@react-navigation/native';
 
 export default class Cart extends Component {
   constructor(props) {
@@ -28,16 +26,28 @@ export default class Cart extends Component {
 		this.setState({ cartItems: newItems, selectAll: (value == true ? false : true) }); // set new state
 	}
 	
-	deleteHandler = (index) => {
+	deleteHandler = async(index) => {
+    console.log("delete clicked :" , index)
+    const currentObject = this.state.cartItems[index].id
+          console.log("Currrent" , currentObject)
+          console.log(" Cart Item :" , this.state.cartItems[index])
+          // console.log(" Cart Item index  :" , this.state.cartItems[index])
 		Alert.alert(
 			'Bạn có chắc chắn muốn xóa sản phẩm này không?',
 			'',
 			[
 				{text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
 				{text: 'Delete', onPress: () => {
+          console.log("delete oke")
+          const currentObject =  this.state.cartItems[index].id
+          const dbRef = firebaseConfig.db.collection("cart").doc(currentObject)
+          dbRef.delete();
 					let updatedCart = this.state.cartItems; /* Clone it first */
 					updatedCart.splice(index, 1); /* Remove item from the cloned cart state */
-					this.setState(updatedCart); /* Update the state */
+					// this.setState(updatedCart); /* Update the state */
+          this.setState({
+            cartItems : updatedCart
+          })         
 				}},
 			],
 			{ cancelable: false }
@@ -60,19 +70,26 @@ export default class Cart extends Component {
 	
 	subtotalPrice = () => {
 		const { cartItems } = this.state;
-		if(cartItems){
-			return cartItems.reduce((sum, item) => sum + (item.checked == 1 ? item.qty * item.salePrices : 0), 0 );
-		}
-		return 0;
+    console.log("Tiền clicked ")
+    console.log(" Cart  " , cartItems)
+		// if(cartItems){
+		// 	return cartItems.reduce((sum, item) => sum + (item.checked == 1 ? item.qty * item.salePrices : 0), 0 );
+		// }
+		// return 0;
+    if(cartItems){
+      const Total = cartItems.reduce((sum, item) => sum + (item.checked == 1 ? item.qty * item.salePrices : 0), 0 );
+      console.log("Tat ca tien :" , Total)
+      return Total;
+    }
+    
 	}
+
   getDataCart = async () => {
    
     firebaseConfig.db.collection('cart').onSnapshot((querySnapshot) => {
       const product = [];
       querySnapshot.docs.forEach((doc) => {
         const { name , color , checked , salePrices , qty , images   } = doc.data();
-        
-        // console.log("id categories :" , categoriesID)
         product.push({
           id: doc.id,
           name,
@@ -86,15 +103,12 @@ export default class Cart extends Component {
       this.setState({
         cartItems:product
       })
-      console.log("Product" , product)
     });
   };
   componentDidMount(){
-    this.getDataCart()
+    this.getDataCart();
   }
   
-  
-
   render() {
     const { navigation } = this.props;
 
@@ -105,10 +119,10 @@ export default class Cart extends Component {
     return(
       <View style={{flex: 1, backgroundColor: '#f6f6f6'}}>
       <View style={{flexDirection: 'row', backgroundColor: '#fff', marginBottom: 10}}>
-        <View style={[styles.centerElement, {width: 50, height: 50}]}>
+        <View style={[styles.centerElement, {width: 50, height: 50 , marginTop:30}]}>
           <Ionicons name="ios-cart" size={25} color="#000" />
         </View>
-        <View style={[styles.centerElement, {height: 50}]}>
+        <View style={[styles.centerElement, {height: 50 , marginTop: 30} ]}>
           <Text style={{fontSize: 18, color: '#000'}}> Giỏ hàng</Text>
         </View>
       </View>
@@ -188,7 +202,7 @@ export default class Cart extends Component {
             <View style={{flexDirection: 'row', flexGrow: 1, flexShrink: 1, justifyContent: 'space-between', alignItems: 'center'}}>
               <Text>Select All</Text>
               <View style={{flexDirection: 'row', paddingRight: 20, alignItems: 'center'}}>
-                <Text style={{color: '#8f8f8f'}}>SubTotal: </Text>
+                <Text style={{color: '#8f8f8f'}}>Tổng tiền : </Text>
                 <Text>{this.subtotalPrice().toFixed(2)}K</Text>
               </View>
             </View>

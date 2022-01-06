@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,23 +6,18 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  TextInput,
+  Dimensions,
 } from "react-native";
 import { formatPrice } from "../utils/Number";
 
-export default class ProductListItem extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
-  
+export default function OrderListItem(props) {
+  const { product , onAddToCardClick } = props;
 
-   render() {
-    const { product , onAddToCardClick } = this.props;
-    return (
+  return (
       <View style={styles.shadow}>
         <View style={styles.container}>
-          <Image style={styles.img} source={{uri: product.images}} />
+          <Image style={styles.img} source={{ uri: product.images }} />
           <View style={styles.info}>
             <Text style={styles.name}>{product.name}</Text>
             <View style={styles.priceRow}>
@@ -30,15 +25,14 @@ export default class ProductListItem extends Component {
                 {" "}
                 {formatPrice(product.salePrices)}{" "}
               </Text>
-              <TouchableOpacity onPress={() => onAddToCardClick(product) } >
-                <Text style={styles.cartText} >MUA </Text>
+              <TouchableOpacity onPress={() => onAddToCardClick(product)}>
+                <Text style={styles.cartText}>MUA </Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </View>
-    );
-  }
+  );
 }
 const styles = StyleSheet.create({
   cartText: {
@@ -62,7 +56,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   img: {
-    height: 150,
+    height: 75,
     borderTopLeftRadius: 4,
     borderBottomLeftRadius: 4,
   },
@@ -78,5 +72,11 @@ const styles = StyleSheet.create({
     flex: 1,
     color: "#888",
     fontSize: 16,
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
   },
 });

@@ -12,6 +12,7 @@ export default function LoginScreen({navigation}) {
     const onFooterLinkPress = () => {
         console.log("Register Clicked")
         navigation.navigate('Register')
+
     }
 
     const onLoginPress = () => {
@@ -33,8 +34,8 @@ export default function LoginScreen({navigation}) {
                         return;
                     }
                     const user = firestoreDocument.data()
-                    navigation.navigate('TabView', {user})
-                    // navigation.navigate('Categories', {user})
+                    // navigation.navigate('TabView', {user})
+                    navigation.navigate('PinCode1', {user})
 
                 })
                 .catch(error => {
@@ -85,7 +86,8 @@ export default function LoginScreen({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop:40
 },
 title: {
 

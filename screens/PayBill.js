@@ -27,8 +27,11 @@ export default function LoginScreen({navigation}) {
                 address: address,
                 phone: phone,
               });
-              console.log("Thanh toan thanh cong ")
-              props.navigation.navigate("Category");
+              alert("Thanh toan thanh cong ");
+              setName('');
+              setAddress('');
+              setPhone('');
+              this.props.navigation.navigate("Categories");
             } catch (error) {
               console.log(error)
             }

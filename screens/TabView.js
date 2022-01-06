@@ -9,17 +9,10 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import CategoriesScreen from "./Categories";
 import OrderScreen from "./Order";
 import CartScreen from "./Cart";
-import LoginScreen from "./Login";
 import SettingScreen from "./Setting";
-
 import  firebaseConfig from "../firebase/Config";
-
-
-
 import { Ionicons } from "@expo/vector-icons";
 
-// if (!global.btoa) {  global.btoa = encode }
-// if (!global.atob) { global.atob = decode }
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -39,32 +32,7 @@ export default class Bottom extends Component {
     };
   }
    componentDidMount(){
-    const usersRef = firebaseConfig.firebase.firestore().collection('users');
-     firebaseConfig.firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          usersRef
-            .doc(user.uid)
-            .get()
-            .then((document) => {
-              const userData = document.data()
-              this.setState({
-                loading:false
-              })
-              this.setState({
-                user:userData
-              })
-            })
-            .catch((error) => {
-              this.setState({
-                loading:false
-              })
-            });
-        } else {
-          this.setState({
-            loading:false
-          })
-        }
-      });
+     this.props.navigation.navigate('Login')
    }
 
   renderScene = ({ route  }) => {
@@ -107,6 +75,7 @@ export default class Bottom extends Component {
 
   render() {
     const { index, routes } = this.state;
+    console.log("Name  :" , this.props.route?.params?.user.email)
 
     return (
       <TabView

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, FlatList, Dimensions } from "react-native";
 import CategoryListItem from "../components/CategoryListItem";
 import  firebase  from "../firebase/Config";
-import { FireSQL } from 'firesql';
 
 
 export default class Categories extends Component {
@@ -34,15 +33,11 @@ export default class Categories extends Component {
           categories:categories
         })
       });
-
-      
-
   }
 
   render() {
     const { categories } = this.state;
     const { navigation } = this.props;
-    // console.log("Categories" , categories)
     return (
       <FlatList
         data={categories}
@@ -52,7 +47,7 @@ export default class Categories extends Component {
             onPress={() =>
               navigation.navigate("Category", {
                 name: item.name,
-
+                id:item.id
               })
             }
           />

@@ -4,16 +4,11 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   Dimensions,
-  Alert,
-  TouchableOpacity,
-  Image
 } from "react-native";
 import ProductListItem from "../components/ProductListItem";
 import { Ionicons } from "@expo/vector-icons";
 import  firebaseConfig from "../firebase/Config";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -21,7 +16,7 @@ export default class Category extends Component {
   constructor(props) {
     super(props);
     this.state = {
-    products:[],
+    // products:[],
     cart:[]
   }
   }
@@ -31,13 +26,35 @@ export default class Category extends Component {
   }
 
   getDataProduct() {
-    // console.log('Clicked mua')
-      firebaseConfig.db.collection('products').onSnapshot((querySnapshot) => {
+      firebaseConfig.db.collection('products').where('categoriesID','==' , this.props.route.params.id).onSnapshot((querySnapshot) => {
         const product = [];
         querySnapshot.docs.forEach((doc) => {
-          const { name , color , checked , salePrices , qty , images   } = doc.data();
-          // console.log("id categories :" , categoriesID)
+          const { name , color , checked , salePrices , qty , images , categoriesID } = doc.data();
+          // console.log("id categories :" , doc.data())
           product.push({
+            id: doc.id,
+            name,
+            color,
+            checked,
+            salePrices,
+            qty,
+            images,
+            categoriesID
+          });
+        });
+        this.setState({
+          product:product
+        })
+      });
+  }
+
+  async onAddToCard(product ){
+
+       firebaseConfig.db.collection('cart').onSnapshot((querySnapshot) => {
+        const cart = [];
+        querySnapshot.docs.forEach((doc) => {
+          const { name , color , checked , salePrices , qty , images   } = doc.data();
+          cart.push({
             id: doc.id,
             name,
             color,
@@ -47,21 +64,37 @@ export default class Category extends Component {
             images,
           });
         });
-        this.setState({
-          product:product
-        })
-        // console.log("Product" , product)
-      });
 
-  }
+        const itemCart = cart.find( e => e.name == product.name)
+        console.log("Itemcart ", itemCart)
+        console.log("Product" , product)
+  
+        if( itemCart){
+          console.log(" 11111")
+          alert("Bạn đã thêm rồi");
+        }else
+        {
+          console.log("2222")
+          
+          firebaseConfig.db.collection("cart").add({
+            name: product.name,
+            color: product.color,
+            checked: product.checked,
+            salePrices:product.salePrices,
+            qty:product.qty,
+            images:product.images,
+          });
+          alert("Thêm sản phẩm thành công ")
+        }
+      });    
+     }
 
   async onAddToCard(product ){
-
-    firebaseConfig.db.collection('cart').onSnapshot((querySnapshot) => {
+         
+     firebaseConfig.db.collection('cart').onSnapshot((querySnapshot) => {
       const cart = [];
       querySnapshot.docs.forEach((doc) => {
         const { name , color , checked , salePrices , qty , images   } = doc.data();
-        // console.log(" cart  :" , doc.data())
         cart.push({
           id: doc.id,
           name,
@@ -72,28 +105,35 @@ export default class Category extends Component {
           images,
         });
       });
+      console.log("Cart" ,typeof cart)
 
       const itemCart = cart.find( e => e.name == product.name)
+      console.log("Itemcart ", itemCart)
+      console.log("Product" , product)
+
       if( itemCart){
-        alert("Bạn đã thêm rồi")
-        return;
-      }
-      else{
+        console.log(" 11111")
+        alert("Bạn đã thêm rồi");
+      }else
+      {
+        console.log("2222")
+        
         firebaseConfig.db.collection("cart").add({
-                name: product.name,
-                color: product.color,
-                checked: product.checked,
-                salePrices:product.salePrices,
-                qty:product.qty,
-                images:product.images,
-              });
-              alert("Thêm sản phẩm thành công ")
+          name: product.name,
+          color: product.color,
+          checked: product.checked,
+          salePrices:product.salePrices,
+          qty:product.qty,
+          images:product.images,
+        });
+        alert("Thêm sản phẩm thành công ")
       }
     });    
    }
    
   render() {
     const { route, navigation } = this.props;
+    console.log("name " , route.params.name )
 
     return (
       <View>
@@ -106,20 +146,12 @@ export default class Category extends Component {
             color="black"
             onPress={() => navigation.goBack()}
           />
-          {/* <TouchableOpacity onPress={ () =>{
-            Alert.alert('Clicked')
-            navigation.navigate('Categories') 
-          }}>
-              <Image
-          style={styles.tinyLogo}
-          source={{uri: 'https://cdn0.iconfinder.com/data/icons/spotify-line-ui-kit/100/go-back-line-512.png'}}
-        />
-        </TouchableOpacity> */}
           <Text
             style={{
               fontSize: 20,
               textAlign: "center",
-              marginTop: 100,
+              marginTop: 40,
+              backgroundColor:'Red',
               marginBottom: 100,
               marginLeft : 40,
               flex: 1,
