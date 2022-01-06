@@ -3,6 +3,7 @@ import { StyleSheet, Button, Text, View, TouchableOpacity, ScrollView, Image, Ac
 import { MaterialIcons, AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import  firebaseConfig  from "../firebase/Config";
 
+
 export default class Cart extends Component {
   constructor(props) {
     super(props);
@@ -12,6 +13,7 @@ export default class Cart extends Component {
       cartItems: [],
     };
   }
+
   selectHandler = (index, value) => {
 		const newItems = [...this.state.cartItems]; // clone the array 
 		newItems[index]['checked'] = value == 1 ? 0 : 1; // set the new value 

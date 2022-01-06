@@ -3811,6 +3811,16 @@ expo-modules-core@0.6.3:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
 
+expo-permissions@~13.1.0:
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-13.1.0.tgz#1be8fe01476950d642ea83d383fd8912492434b9"
+  integrity sha512-f3ngERaoeAw8236xyvw4gS89Fxd4fU2soKXQn0JPXwiDGmIXO+lIJNH3psNvAebj4DfmyQtGW4AS1itG83GHaQ==
+
+expo-screen-capture@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/expo-screen-capture/-/expo-screen-capture-4.1.0.tgz#2839f48344fb994e790fc9f79c60ccd44baba35c"
+  integrity sha512-IkWn7Grh0SercLFiky5DYi3SRmNnWbxpvQOENBVarhxZGYkMh/2mu0XvB5fyYIMSI9wxPVsDbeQuUcwA+SqVAg==
+
 expo-status-bar@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.2.0.tgz#16e73205da563f9536f562e439081e30e318a82e"
@@ -6385,6 +6395,11 @@ react-native-safe-area-view@^0.14.9:
   integrity sha512-WII/ulhpVyL/qbYb7vydq7dJAfZRBcEhg4/UWt6F6nAKpLa3gAceMOxBxI914ppwSP/TdUsandFy6lkJQE0z4A==
   dependencies:
     hoist-non-react-statics "^2.3.1"
+
+react-native-screen-capture-secure@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-screen-capture-secure/-/react-native-screen-capture-secure-1.0.5.tgz#5ba6649a7cb9fdf2595c7620c3ce6c0e785ab972"
+  integrity sha512-/YnJR2uAsMtuAB2/u83jBm6VvyF7xRx0VIisnc8KR2rX25/wVpjFWG8RdZ6gZfhWYtQoQSKJNuljoQIg1sjeJw==
 
 react-native-screens@~3.10.1:
   version "3.10.1"
