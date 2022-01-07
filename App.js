@@ -19,9 +19,8 @@ import OrderListItem from "./components/OrderListItem";
 import PinCode from "./screens/PinCode";
 import CreatePinCode from "./screens/CreatePinCode";
 import PinCode1 from "./screens/PinCode1";
-import { usePreventScreenCapture , addScreenshotListener } from 'expo-screen-capture';
-
-import * as Permissions from 'expo-permissions'
+// import { usePreventScreenCapture , addScreenshotListener } from 'expo-screen-capture';
+// import * as Permissions from 'expo-permissions'
 
 
 
@@ -31,7 +30,7 @@ import * as Permissions from 'expo-permissions'
 
 const Stack = createNativeStackNavigator();
   export default function App({ route, props }) {
-    usePreventScreenCapture();
+    // usePreventScreenCapture();
     // async function getCameraPermission(){
     //   const { status } = await MediaLibrary.requestPermissionsAsync();
     //   if (status === 'granted') {
