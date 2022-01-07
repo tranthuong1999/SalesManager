@@ -34,8 +34,8 @@ export default function LoginScreen({navigation}) {
                         return;
                     }
                     const user = firestoreDocument.data()
-                    navigation.navigate('TabView', {user})
-                    // navigation.navigate('PinCode1', {user})
+                    // navigation.navigate('TabView', {user})
+                    navigation.navigate('PinCode1', {user})
 
                 })
                 .catch(error => {

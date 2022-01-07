@@ -72,19 +72,26 @@ export default class Cart extends Component {
 	
 	subtotalPrice = () => {
 		const { cartItems } = this.state;
-    console.log("Tiền clicked ")
-    console.log(" Cart  " , cartItems)
-		// if(cartItems){
-		// 	return cartItems.reduce((sum, item) => sum + (item.checked == 1 ? item.qty * item.salePrices : 0), 0 );
-		// }
-		// return 0;
+    
     if(cartItems){
       const Total = cartItems.reduce((sum, item) => sum + (item.checked == 1 ? item.qty * item.salePrices : 0), 0 );
-      console.log("Tat ca tien :" , Total)
       return Total;
     }
-    
 	}
+   orderClick = () =>{
+    const { cartItems } = this.state;
+     const Total =  cartItems.reduce((sum, item) => sum + (item.checked == 1 ? item.qty * item.salePrices : 0), 0 );
+
+    if(Total == 0){
+      alert(" Please order product ")
+    }else{
+      // console.log("Tien hang " , Total)
+      this.props.navigation.navigate("PayBill", {
+        money: Total,
+      })
+    }
+  }
+  
 
   getDataCart = async () => {
    
@@ -211,9 +218,9 @@ export default class Cart extends Component {
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'flex-end', height: 32, paddingRight: 20, alignItems: 'center'}}>
             <TouchableOpacity style={[styles.centerElement, {backgroundColor: '#0faf9a', width: 100, height: 25, borderRadius: 5}]}
-             onPress={() => this.props.navigation.navigate('PayBill')}
+             onPress={() =>this.orderClick()}
              >
-              <Text style={{color: '#ffffff'}}>Đặt hàng </Text>
+              <Text style={{color: '#ffffff'}}> Đặt hàng </Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -33,7 +33,7 @@ export default function RegistrationScreen({ navigation }) {
       alert("Passwords don't match.");
       return;
     }
-    // alert(" Account successfully created ");
+    alert(" Account successfully created ");
     setFullName("");
     setEmail("");
     setPassword("");

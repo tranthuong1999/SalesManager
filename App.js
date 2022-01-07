@@ -31,20 +31,7 @@ import PinCode1 from "./screens/PinCode1";
 const Stack = createNativeStackNavigator();
   export default function App({ route, props }) {
     // usePreventScreenCapture();
-    // async function getCameraPermission(){
-    //   const { status } = await MediaLibrary.requestPermissionsAsync();
-    //   if (status === 'granted') {
-    //     ScreenCapture.addScreenshotListener(() => {
-    //       alert('Thanks for screenshotting my beautiful app 😊');
-    //     });
-    //   }
-    // }
-
-    // useEffect(() =>{
-
-    //   getCameraPermission();
-
-    // },[])
+    
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="TabView">

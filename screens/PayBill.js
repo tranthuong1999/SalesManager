@@ -4,7 +4,9 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import   firebase   from '../firebase/Config';
 import { Ionicons } from "@expo/vector-icons";
 
-export default function LoginScreen({navigation}) {
+export default function LoginScreen({navigation }) {
+
+  // console.log("Tien :" , props.route.params.money)
     const [name, setName] = useState('')
     const [address, setAddress] = useState('')
     const [phone, setPhone] = useState('')
